@@ -14,7 +14,7 @@ function linkOverlap(startTime1, endTime1, startTime2, endTime2) {
 function timeOverlap(firstClass, secondClass) {
 
     if (!firstClass || !secondClass) {
-        return true;
+        return false;
     }
 
     let start1 = parseInt(firstClass.TIMES.substring(0,4));

@@ -93,38 +93,38 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     
 
     //Gets rid of all combos that don't have valid lecture + lab code
-    let randomcount = 0; 
     combos.forEach(item => {
         item.forEach(element => {
-            randomcount++;
-            if (!sameCourseSet(element.lec, element.link)) {
-                element.invalid = true; 
+             if ((element.tut && !sameCourseSet(element.lec, element.tut)) ||
+                 (element.lab && !sameCourseSet(element.lec, element.lab))
+                ) {
+                    element.invalid = true;
             }
         })
     })
-
-    //Remove all combos that have an invalid feature
+   
+    //Remove all combos that have an invalid code
     combos = combos.map(item => item.filter(element => !element.invalid));
     combos.sort((a,b) => a.length - b.length);
 
-    let names = [];
-    let index = 0; 
 
-    for (let key in classes) {
-        names[index] = classes[key].name;
-        names[index] += classes[key].num;
-        index++;
-    }
+    // let names = [];
+    // let index = 0; 
+    // for (let key in classes) {
+    //     names[index] = classes[key].name;
+    //     names[index] += classes[key].num;
+    //     index++;
+    // }
 
-        index = 0; 
+    //     index = 0; 
 
-    combos.forEach(item => {
-        console.log(names[index]);
-        for (let element of item) {
-            console.log(element);
-        }
-        index++;
-    }) 
+    // combos.forEach(item => {
+    //     console.log(names[index]);
+    //     for (let element of item) {
+    //         console.log(element);
+    //     }
+    //     index++;
+    // }) 
 
     const allSchedules = permute(combos);
 
@@ -134,14 +134,26 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     for (let possibilty of allSchedules) {
 
         let sections = [];
+        let hasConflict = false;
 
         for (let course of possibilty) {
             sections.push(course.lec);
-            sections.push(course.link);
+
+            if (course.lab) {sections.push(course.lab); }
+            if (course.tut) {sections.push(course.tut); }
+
+            // Stops Snycronous courses from entering course, can be deleted 
+            if ((course.lec && course.lec.TIMES === "C/D") ||
+                (course.lab && course.lab.TIMES === "C/D") ||
+                (course.tut && course.tut.TIMES === "C/D")) {
+                 hasConflict = true;
+                 break;
+        }
+
+
         }
 
         let sectionLength = sections.length;
-        let hasConflict = false; 
 
         for (let i = 0; i < sectionLength && !hasConflict; i++) {
             for (let j = i + 1; j < sectionLength; j++) {
@@ -151,8 +163,8 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
                 break;
                 } 
             }
-
         }
+
 
         if (!hasConflict) {
             validSchedules.push(possibilty); 
@@ -177,18 +189,26 @@ validSchedules.forEach((schedule, scheduleIndex) => {
     schedule.forEach(course => {
         // Lecture
         let lecDays = appendDays(course.lec);
-        let linkDays = appendDays(course.link); 
+        let tutDays = appendDays(course.tut); 
+        let labDays = appendDays(course.lab); 
         
         const lecItem = document.createElement("p");
         lecItem.textContent = `Lecture: ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB} - ${course.lec.TIMES}:  ${lecDays} `;
         container.appendChild(lecItem);
 
         // Link, if it exists
-        if (course.link) {
-            const linkItem = document.createElement("p");
-            linkItem.textContent = `Link: ${course.link.SUBJ_CODE} ${course.link.CRSE_NUMB} - ${course.link.TIMES}:  ${linkDays}`;
-            container.appendChild(linkItem);
+        if (course.tut) {
+            const tutItem = document.createElement("p");
+            tutItem.textContent = `Tut: ${course.tut.SUBJ_CODE} ${course.tut.CRSE_NUMB} - ${course.tut.TIMES}:  ${tutDays}`;
+            container.appendChild(tutItem);
         }
+
+        if (course.lab) {
+            const labItem = document.createElement("p");
+            labItem.textContent = `Lab: ${course.lab.SUBJ_CODE} ${course.lab.CRSE_NUMB} - ${course.lab.TIMES}:  ${labDays}`;
+            container.appendChild(labItem);
+        }
+
     });
 
     // Optional: add a separator

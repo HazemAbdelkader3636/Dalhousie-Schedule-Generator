@@ -27,136 +27,70 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
         name: classOneTitle,
         num: classOneNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     },
     classTwo: {
         name: classTwoTitle,
         num: classTwoNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     },
     classThree: {
         name: classThreeTitle,
         num: classThreeNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     },
     classFour: {
         name: classFourTitle,
         num: classFourNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     },
     classFive: {
         name: classFiveTitle,
         num: classFiveNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     },
     classSix: {
         name: classSixTitle,
         num: classSixNumber,
         lec: [],
-        link: [],
+        tut: [],
+        lab: [],
         hasLink: false
     }
 };
 
 // Splits up the classes into lectures and links
     winterData.forEach(element => {
-        if ((element.SUBJ_CODE == classOneTitle) && (element.CRSE_NUMB.trim() == classOneNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classOne.lec.push(element);
-            } else {
-                classes.classOne.hasLink = true;
-                classes.classOne.link.push(element);
-            }
-        }
-        if ((element.SUBJ_CODE == classTwoTitle) && (element.CRSE_NUMB.trim() == classTwoNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classTwo.lec.push(element);
-            } else {
-                classes.classTwo.hasLink = true;
-                classes.classTwo.link.push(element);
-            }
-        }
-        if ((element.SUBJ_CODE == classThreeTitle) && (element.CRSE_NUMB.trim() == classThreeNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classThree.lec.push(element);
-            } else {
-                classes.classThree.hasLink = true;
-                classes.classThree.link.push(element);
-            }
-        }
-        if ((element.SUBJ_CODE == classFourTitle) && (element.CRSE_NUMB.trim() == classFourNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classFour.lec.push(element);
-            } else {
-                classes.classFour.hasLink = true;
-                classes.classFour.link.push(element);
-            }
-        }
-        if ((element.SUBJ_CODE == classFiveTitle) && (element.CRSE_NUMB.trim() == classFiveNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classFive.lec.push(element);
-            } else {
-                classes.classFive.hasLink = true;
-                classes.classFive.link.push(element);
-            }
-        }
-        if ((element.SUBJ_CODE == classSixTitle) && (element.CRSE_NUMB.trim() == classSixNumber)) {
-            if (element.SCHD_TYPE == "Lec") {
-                classes.classSix.lec.push(element);
-            } else {
-                classes.classSix.hasLink = true;
-                classes.classSix.link.push(element);
-            }
-        } 
+        updateClass(classes, element);
     });
 
-     if (classOneTitle == "") {
-        delete classes.classOne;
-    }
-     if (classTwoTitle == "") {
-        delete classes.classTwo;
-    }
-     if (classThreeTitle == "") {
-        delete classes.classThree;
-    }
-    if (classFourTitle == "") {
-        delete classes.classFour;
-    }
-    if (classFiveTitle == "") {
-        delete classes.classFive;
-    }
-    if (classSixTitle == "") {
-        delete classes.classSix;
-    }
+    deleteClasses(classes);
 
-    //Finding all combos of lab + lectures you can have (contains overlap)
+    console.log(classes.classOne);
+
+    
+    //Finding all combos of link + lectures  you can have (contains overlap)
     let combos = []; 
     for (let key in classes) {
     combos.push(scheduleCombo(classes[key]));
     }
+
+    console.log(combos); 
     
-    //Gets rid of all the combos that have a lecture and link conflicting
-    combos.forEach(item => {
-    item.forEach(element => {
-        if (element.link && linkOverlap (
-            parseInt(element.lec.TIMES.substring(0,4)),
-            parseInt(element.lec.TIMES.substring(5,9)),
-            parseInt(element.link.TIMES.substring(0,4)),
-            parseInt(element.link.TIMES.substring(5,9))
-            ) && sameDay(element.lec, element.link)) {
-            element.invalid = true;
-            }
-        });
-    });
 
     //Gets rid of all combos that don't have valid lecture + lab code
     let randomcount = 0; 

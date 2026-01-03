@@ -121,16 +121,36 @@ function scheduleCombo(classes) {
 
     classes.lec.forEach(lec => {
 
-    if (classes.hasLink) {
-        classes.link.forEach(link => {
-           combos.push({lec, link});
-        });
-
-    } else {
-        combos.push({lec});
+    // lecture only 
+    if (!classes.hasLink) {
+        combos.push({lec}); 
     }
 
+    // lecture + tutorial
+    if (classes.tut.length > 0 && classes.lab.length == 0) {
+        classes.tut.forEach(tut => {
+            combos.push({ lec, tut });
+        })
+    }
+
+    // lecture + lab
+    if (classes.lab.length > 0 && classes.tut.length == 0) {
+        classes.lab.forEach(tut => {
+            combos.push({ lec, tut });
+        })
+    }
+
+    // lecture + lab + tutorial
+    if (classes.lab.length > 0 && classes.tut.length > 0) {
+        classes.tut.forEach(tut => {
+            classes.lab.forEach(lab => {
+                combos.push({ lec, tut, lab});
+            });
+         });
+    }
     });
+
+
     return combos;
 }
 
@@ -155,4 +175,125 @@ function appendDays(course) {
         res += "F "
     }
     return res; 
+}
+
+
+
+function deleteClasses(classes) {
+     if (classes.classOne.name == "") {
+        delete classes.classOne;
+    }
+     if (classes.classTwo.name == "") {
+        delete classes.classTwo;
+    }
+     if (classes.classThree.name == "") {
+        delete classes.classThree;
+    }
+    if (classes.classFour.name == "") {
+        delete classes.classFour;
+    }
+    if (classes.classFive.name == "") {
+        delete classes.classFive;
+    }
+    if (classes.classSix.name == "") {
+        delete classes.classSix;
+    }
+}
+
+function updateClass(classes, element) { 
+    if ((element.SUBJ_CODE == classes.classOne.name) && (element.CRSE_NUMB.trim() == classes.classOne.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classOne.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classOne.tut.push(element);
+                classes.classOne.hasLink = true; 
+                break;
+            case "Lab" :
+                classes.classOne.lab.push(element);
+                classes.classOne.hasLink = true; 
+                break;
+           }
+        }
+
+        if ((element.SUBJ_CODE == classes.classTwo.name) && (element.CRSE_NUMB.trim() == classes.classTwo.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classTwo.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classTwo.tut.push(element);
+                classes.classTwo.hasLink = true; 
+                break;
+            case "Lab" :
+                classes.classTwo.lab.push(element); 
+                classes.classTwo.hasLink = true;
+                break;
+           }
+        }
+
+        if ((element.SUBJ_CODE == classes.classThree.name) && (element.CRSE_NUMB.trim() == classes.classThree.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classThree.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classThree.tut.push(element);
+                classes.classThree.hasLink = true; 
+                break;
+            case "Lab" :
+                classes.classThree.lab.push(element); 
+                classes.classThree.hasLink = true;
+                break;
+           }
+        }
+
+        if ((element.SUBJ_CODE == classes.classFour.name) && (element.CRSE_NUMB.trim() == classes.classFour.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classFour.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classFour.tut.push(element); 
+                classes.classFour.hasLink = true;
+                break;
+            case "Lab" :
+                classes.classFour.lab.push(element); 
+                classes.classFour.hasLink = true;
+                break;
+           }
+        }
+
+        if ((element.SUBJ_CODE == classes.classFive.name) && (element.CRSE_NUMB.trim() == classes.classFive.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classFive.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classFive.tut.push(element); 
+                classes.classFive.hasLink = true;
+                break;
+            case "Lab" :
+                classes.classFive.lab.push(element); 
+                classes.classFive.hasLink = true;
+                break;
+           }
+        }
+
+        if ((element.SUBJ_CODE == classes.classSix.name) && (element.CRSE_NUMB.trim() == classes.classSix.num)) {
+           switch(element.SCHD_TYPE) {
+            case "Lec" :
+                classes.classSix.lec.push(element);
+                break;
+            case "Tut" :
+                classes.classSix.tut.push(element); 
+                classes.classSix.hasLink = true;
+                break;
+            case "Lab" :
+                classes.classSix.lab.push(element);
+                classes.classSix.hasLink = true; 
+                break;
+           }
+        }
 }

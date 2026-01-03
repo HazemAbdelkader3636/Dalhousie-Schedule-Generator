@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example</title>
+</head>
+<body>
+    <h2>Dalhousie Schedule Generator</h2>
+    <form action="#" method="post">
+
+        <label for ="term">Term: </label> 
+        <select name ="term" id ="term"> 
+            <option value = "fall">Fall</option>
+            <option value = "winter">Winter</option>
+            <option value = "summer">Summer</option>
+        </select> <br><br>
+
+        <h3>Insert Class Abrevation and Then the Course Number Associated</h3>
+        <h4>For Example, ECON 1101</h4>
+            
+
+        <label for="input1">Class 1:</label>
+        <input type="text" id="input1" name="input1" placeholder="CRSE" value ="BIOL">
+        <input type="number" id="number1" name="number1" placeholder="0000" value="2030"><br><br>
+
+        <label for="input2">Class 2:</label>
+        <input type="text" id="input2" name="input2" placeholder="CRSE" value ="">
+        <input type="number" id="number2" name="number2" placeholder="0000" value=""><br><br>
+
+        <label for="input3">Class 3:</label>
+        <input type="text" id="input3" name="input3" placeholder="CRSE" value ="">
+        <input type="number" id="number3" name="number3" placeholder="0000" value=""><br><br>
+
+        <label for="input4">Class 4:</label>
+        <input type="text" id="input4" name="input4" placeholder="CRSE" value ="">
+        <input type="number" id="number4" name="number4" placeholder="0000" value=""><br><br>
+
+        <label for="input5">Class 5:</label>
+        <input type="text" id="input5" name="input5" placeholder="CRSE" value ="">
+        <input type="number" id="number5" name="number5" placeholder="0000" value=""><br><br>
+
+        <label for="input6">Class 6:</label>
+        <input type="text" id="input6" name="input6" placeholder="CRSE">
+        <input type="number" id="number6" name="number6" placeholder="0000"><br><br>
+
+        <button type="submit" id = "generateBtn">Generate</button>
+    </form>
+
+
+    <script src="js/winterData.js"></script>
+    <script src="js/fallData.js"></script>
+    <script src = "js/scheduleUtils.js"></script>
+    <script src="js/script.js"></script>
+
+</body>
+</html>
+

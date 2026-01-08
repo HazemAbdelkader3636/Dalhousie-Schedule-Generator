@@ -1,6 +1,6 @@
 /* 
     @description: This function is used to find whether or 
-    not classes have a time overlap
+        not classes have a time overlap
     @param: startTime1 is what time the first class starts
     @param: endTime1 is what time the first class ends
     @param: startTime2 is what time the second class starts
@@ -26,13 +26,17 @@ function timeOverlap(firstClass, secondClass) {
 }
 
 /*
+    @description: uses backtracking to find every permutation of a schedule
+        whilst mainting the order of the elements. Each permutation reperesents 
+        a schedule that could be made, and can have time conflicts
+    @param:
 
 
 */
-function permute(slots) {
+function permute(combos) {
     let result = [];
 
-    backtrack([], 0, slots, result);
+    backtrack([], 0, combos, result);
     return result;
 }
 
@@ -40,15 +44,15 @@ function permute(slots) {
 
 
 */
-function backtrack(combination, index, slots, result)  {
-  if (combination.length === slots.length) {
+function backtrack(combination, index, combos, result)  {
+  if (combination.length === combos.length) {
     result.push(Array.from(combination));
   }
   else {
-    const currentSlot = slots[index];
+    const currentSlot = combos[index];
     for (let item of currentSlot) {
     combination.push(item);
-    backtrack(combination, index + 1, slots, result);
+    backtrack(combination, index + 1, combos, result);
     combination.pop(); 
      }
     }
@@ -57,8 +61,8 @@ function backtrack(combination, index, slots, result)  {
 
 /*
     @description: This function is used to see wether or not the lecture 
-    and the link for the lecture are in the same day. This is used to 
-    make the lecture and link combonations for the schedules.
+        and the link for the lecture are in the same day. This is used to 
+        make the lecture and link combonations for the schedules.
     @param: lec is an object of the course that is specifically a lecture
     @param: link is an object of the course that is specifically a tutorial or lab
     @return: returns wether or not the lecture and the link are on the same day
@@ -79,7 +83,7 @@ function sameDay(lec, link) {
 
 /*
     @description: This function checks if the lecture and the link are apart of the same class, it
-    does this by checking if the SEQ_NUMB is the same of each.
+        does this by checking if the SEQ_NUMB is the same of each.
     @param: lecture, this is the lecture course getting compared
     @param: link, this is the link course getting compared
     @return: true if they are the same SEQ_NUMB, false if they are not
@@ -111,7 +115,7 @@ function sameCourseSet(lec, link) {
 
 /*
     @description: This function is used to make all the possible combinations 
-    with the lecture and the link corresponding to that lecture
+        with the lecture and the link corresponding to that lecture
     @param: classes is the object that includes all the courses the user inputed
     @return: returns an array of all the combos of lectures and links for that course
 
@@ -135,8 +139,8 @@ function scheduleCombo(classes) {
 
     // lecture + lab
     if (classes.lab.length > 0 && classes.tut.length == 0) {
-        classes.lab.forEach(tut => {
-            combos.push({ lec, tut });
+        classes.lab.forEach(lab => {
+            combos.push({ lec, lab });
         })
     }
 
@@ -144,7 +148,7 @@ function scheduleCombo(classes) {
     if (classes.lab.length > 0 && classes.tut.length > 0) {
         classes.tut.forEach(tut => {
             classes.lab.forEach(lab => {
-                combos.push({ lec, tut, lab});
+                combos.push({lec, tut, lab});
             });
          });
     }
@@ -177,7 +181,13 @@ function appendDays(course) {
     return res; 
 }
 
-
+/*
+    @description: Removes the course from the object "classes" if the user leaves the
+        input field blank
+    @param: classes is the object that holds the course name and course number that is 
+        determined from the input fields
+    
+*/
 
 function deleteClasses(classes) {
      if (classes.classOne.name == "") {
@@ -200,6 +210,15 @@ function deleteClasses(classes) {
     }
 }
 
+
+/*
+    @description: If the course name and course number allign with the academic timetable data, append the
+        lecture, and optional link to the certain individual course object in classes. classOne, is the first
+        input field the user can fill, classTwo is the second, and so forth. 
+    @param: classes, is the object that holds the course name, and course number from the input field. It will be updated
+        with lectures and links if applicable in this function
+    @param: element, this is an object in either winterData or fallData (depending on term input).
+*/
 function updateClass(classes, element) { 
     if ((element.SUBJ_CODE == classes.classOne.name) && (element.CRSE_NUMB.trim() == classes.classOne.num)) {
            switch(element.SCHD_TYPE) {

@@ -8,6 +8,9 @@
 document.getElementById("generateBtn").addEventListener("click", function(e) {
     e.preventDefault();
 
+    let scheduleDisplay = document.getElementById("schedules"); 
+    scheduleDisplay.innerHTML = "";
+
     let classOneTitle = document.getElementById("input1").value.toUpperCase().trim();
     let classTwoTitle = document.getElementById("input2").value.toUpperCase().trim();
     let classThreeTitle = document.getElementById("input3").value.toUpperCase().trim();
@@ -22,115 +25,117 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     let classFiveNumber = document.getElementById("number5").value.trim()
     let classSixNumber = document.getElementById("number6").value.trim()
 
-    let classes = {
-    classOne: {
-        name: classOneTitle,
-        num: classOneNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
-    },
-    classTwo: {
-        name: classTwoTitle,
-        num: classTwoNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
-    },
-    classThree: {
-        name: classThreeTitle,
-        num: classThreeNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
-    },
-    classFour: {
-        name: classFourTitle,
-        num: classFourNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
-    },
-    classFive: {
-        name: classFiveTitle,
-        num: classFiveNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
-    },
-    classSix: {
-        name: classSixTitle,
-        num: classSixNumber,
-        lec: [],
-        tut: [],
-        lab: [],
-        hasLink: false
+    let termType = document.getElementById("term")
+    let data;
+    if (termType.value == "fall") { 
+        data = fallData;
+    } else {
+        data = winterData; 
     }
-};
 
-// Splits up the classes into lectures and links
-    winterData.forEach(element => {
+    let classes = {
+        classOne: {
+            name: classOneTitle,
+            num: classOneNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        },
+        classTwo: {
+            name: classTwoTitle,
+            num: classTwoNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        },
+        classThree: {
+            name: classThreeTitle,
+            num: classThreeNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        },
+        classFour: {
+            name: classFourTitle,
+            num: classFourNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        },
+        classFive: {
+            name: classFiveTitle,
+            num: classFiveNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        },
+        classSix: {
+            name: classSixTitle,
+            num: classSixNumber,
+            lec: [],
+            tut: [],
+            lab: [],
+            hasLink: false
+        }
+    };
+
+
+    // Places all courses into its corresponding object by going through each object in data
+    data.forEach(element => {
         updateClass(classes, element);
     });
 
+    //Remove courses that user leaves blank
     deleteClasses(classes);
 
-    console.log(classes.classOne);
-
-    
-    //Finding all combos of link + lectures  you can have (contains overlap)
+    //Finding all combonations of link + lectures you can have for each individual class
     let combos = []; 
     for (let key in classes) {
-    combos.push(scheduleCombo(classes[key]));
+        combos.push(scheduleCombo(classes[key]));
     }
 
-    console.log(combos); 
-    
-
-    //Gets rid of all combos that don't have valid lecture + lab code
+    //Gets rid of all combos that don't have the same lecture and link code
+    //Ex. B01 != L02 set to invalid,  B01 == L01 set to valid
     combos.forEach(item => {
         item.forEach(element => {
              if ((element.tut && !sameCourseSet(element.lec, element.tut)) ||
                  (element.lab && !sameCourseSet(element.lec, element.lab))
                 ) {
                     element.invalid = true;
+                    console.log("IT HAPPENED");
             }
         })
     })
+
    
-    //Remove all combos that have an invalid code
-    combos = combos.map(item => item.filter(element => !element.invalid));
-    combos.sort((a,b) => a.length - b.length);
+    // Remove all combos that have invalid set as true 
+    let clean = []; 
 
+    combos.forEach(item => {
 
-    // let names = [];
-    // let index = 0; 
-    // for (let key in classes) {
-    //     names[index] = classes[key].name;
-    //     names[index] += classes[key].num;
-    //     index++;
-    // }
+        let valid = []; 
+        console.log(item);
+        item.forEach(element => {
+            if (!element.invalid) {
+                valid.push(element);
+            }
+        })
 
-    //     index = 0; 
+        clean.push(valid); 
+    })
+    combos = clean; 
 
-    // combos.forEach(item => {
-    //     console.log(names[index]);
-    //     for (let element of item) {
-    //         console.log(element);
-    //     }
-    //     index++;
-    // }) 
-
+    // This includes all schedules even with time conflicts
     const allSchedules = permute(combos);
-
 
     const validSchedules = [];
 
+    // Push all schedules that don't have any time conflicts into validSchedules
     for (let possibilty of allSchedules) {
 
         let sections = [];
@@ -142,19 +147,18 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
             if (course.lab) {sections.push(course.lab); }
             if (course.tut) {sections.push(course.tut); }
 
-            // Stops Snycronous courses from entering course, can be deleted 
+            // Stops Snycronous courses from entering course (Can be deleted if needed)
             if ((course.lec && course.lec.TIMES === "C/D") ||
                 (course.lab && course.lab.TIMES === "C/D") ||
                 (course.tut && course.tut.TIMES === "C/D")) {
                  hasConflict = true;
                  break;
         }
-
-
         }
 
         let sectionLength = sections.length;
 
+        // Only push section array if the array has no time conflicts between each element
         for (let i = 0; i < sectionLength && !hasConflict; i++) {
             for (let j = i + 1; j < sectionLength; j++) {
                 if (timeOverlap(sections[i], sections[j])
@@ -171,50 +175,50 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
         }
     }
 
-console.log(validSchedules);
+    console.log(validSchedules);
 
 
-// Select container to append to
-const container = document.createElement("div");
-document.body.appendChild(container);
 
-// Loop through each schedule
-validSchedules.forEach((schedule, scheduleIndex) => {
-    // Add a heading for the schedule
-    const heading = document.createElement("h3");
-    heading.textContent = `Schedule #${scheduleIndex + 1}`;
-    container.appendChild(heading);
+    const container = document.createElement("div");
+    scheduleDisplay.appendChild(container);
 
-    // Loop through each course in the schedule
-    schedule.forEach(course => {
-        // Lecture
-        let lecDays = appendDays(course.lec);
-        let tutDays = appendDays(course.tut); 
-        let labDays = appendDays(course.lab); 
-        
-        const lecItem = document.createElement("p");
-        lecItem.textContent = `Lecture: ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB} - ${course.lec.TIMES}:  ${lecDays} `;
-        container.appendChild(lecItem);
+    // Loop through each schedule
+    validSchedules.forEach((schedule, scheduleIndex) => {
 
-        // Link, if it exists
-        if (course.tut) {
-            const tutItem = document.createElement("p");
-            tutItem.textContent = `Tut: ${course.tut.SUBJ_CODE} ${course.tut.CRSE_NUMB} - ${course.tut.TIMES}:  ${tutDays}`;
-            container.appendChild(tutItem);
-        }
+        // Add a heading for the schedule
+        const heading = document.createElement("h3");
+        heading.textContent = `Schedule #${scheduleIndex + 1}`;
+        container.appendChild(heading);
 
-        if (course.lab) {
-            const labItem = document.createElement("p");
-            labItem.textContent = `Lab: ${course.lab.SUBJ_CODE} ${course.lab.CRSE_NUMB} - ${course.lab.TIMES}:  ${labDays}`;
-            container.appendChild(labItem);
-        }
+        // Loop through each course in the schedule
+        schedule.forEach(course => {
+            let lecDays = appendDays(course.lec);
+            let tutDays = appendDays(course.tut); 
+            let labDays = appendDays(course.lab); 
+            
+            const lecItem = document.createElement("p");
+            lecItem.textContent = `Lecture: ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB} - ${course.lec.TIMES}:  ${lecDays} `;
+            container.appendChild(lecItem);
 
+            // Output Tut, if it exists
+            if (course.tut) {
+                const tutItem = document.createElement("p");
+                tutItem.textContent = `Tut: ${course.tut.SUBJ_CODE} ${course.tut.CRSE_NUMB} - ${course.tut.TIMES}:  ${tutDays}`;
+                container.appendChild(tutItem);
+            }
+
+            // Output Lab, if it exists
+            if (course.lab) {
+                const labItem = document.createElement("p");
+                labItem.textContent = `Lab: ${course.lab.SUBJ_CODE} ${course.lab.CRSE_NUMB} - ${course.lab.TIMES}:  ${labDays}`;
+                container.appendChild(labItem);
+            }
+
+        });
+
+        const hr = document.createElement("hr");
+        container.appendChild(hr);
     });
-
-    // Optional: add a separator
-    const hr = document.createElement("hr");
-    container.appendChild(hr);
-});
 
 })
 

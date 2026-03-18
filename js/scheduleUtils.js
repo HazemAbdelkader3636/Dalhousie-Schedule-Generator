@@ -316,3 +316,94 @@ function updateClass(classes, element) {
            }
         }
 }
+
+function MakeSchedule(validSchedules) {
+
+    const days = {
+        MONDAYS: 1,
+        TUESDAYS: 2,
+        WEDNESDAYS: 3,
+        THURSDAYS: 4,
+        FRIDAYS: 5
+    };
+
+    let finalSchedules = [];
+   
+
+    validSchedules.forEach((schedule) => {
+        
+        let scheduleTable = [
+            ["0835-0925", "", "", "", "", ""],
+            ["1005-1125", "", "", "", "", ""],
+            ["1035-1125", "", "", "", "", ""],
+            ["1135-1225", "", "", "", "", ""],
+            ["1135-1255", "", "", "", "", ""],
+            ["1205-1255", "", "", "", "", ""],
+            ["1305-1425", "", "", "", "", ""],
+            ["1435-1525", "", "", "", "", ""],
+            ["1435-1625", "", "", "", "", ""],
+            ["1635-1725", "", "", "", "", ""]
+            ];
+
+        schedule.forEach((Item) => {
+            ["lec", "lab", "tut"].forEach(type => {
+
+                if (Item[type]) {
+                const course = Item[type];
+                const time = course.TIMES;
+                
+
+                const rowIndex = scheduleTable.findIndex(r => r[0] === time);
+
+                if (rowIndex !== -1) {
+                        // loop through all days
+                       Object.keys(days).forEach(day => {
+                            if (course[day]) { // non-null means it meets
+                                const colIndex = days[day];
+                                scheduleTable[rowIndex][colIndex] = 
+                                    `${course.SUBJ_CODE} ${course.CRSE_NUMB} ${type.toUpperCase()}`;
+                            }
+                        });
+                    }
+                }
+            })
+        })
+
+        finalSchedules.push(scheduleTable);
+    
+    })
+    
+    return finalSchedules;
+}
+
+function displayScheduleTable(scheduleTable, container) {
+    const table = document.createElement("table");
+    table.border = "1";
+    table.style.borderCollapse = "collapse";
+    table.style.marginBottom = "20px";
+
+    // Header row
+    const headerRow = document.createElement("tr");
+    ["TIME", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        th.style.padding = "5px";
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    // Table rows
+    scheduleTable.forEach(rowData => {
+        const row = document.createElement("tr");
+        rowData.forEach(cellData => {
+            const td = document.createElement("td");
+            td.textContent = cellData;
+            td.style.padding = "5px";
+            td.style.textAlign = "center";
+            row.appendChild(td);
+        });
+        table.appendChild(row);
+    });
+
+    container.appendChild(table);
+}

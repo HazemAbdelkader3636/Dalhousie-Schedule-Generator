@@ -1,0 +1,158 @@
+/* ===== GLOBAL ===== */
+* {
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #fdf6e3, #eef2f7);
+    color: #002a5c;
+    margin: 0;
+    padding: 40px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* ===== HEADINGS ===== */
+h1, h2, h3 {
+    font-weight: 700;
+    color: #002a5c;
+}
+
+h2 {
+    text-align: center;
+}
+
+h3 {
+    margin-top: 32px;
+    margin-bottom: 12px;
+}
+
+/* ===== FORM ===== */
+form, .form-container {
+    background: white;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 42, 92, 0.12);
+    max-width: 700px;
+    margin: 20px auto;
+    border-top: 6px solid #fdb515;
+}
+
+/* ===== INPUTS ===== */
+input, select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #002a5c;
+    box-shadow: 0 0 0 3px rgba(0, 42, 92, 0.18);
+}
+
+/* ===== BUTTON ===== */
+button {
+    background: linear-gradient(135deg, #002a5c, #001b3d);
+    color: #fdb515;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 42, 92, 0.35);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ===== SCHEDULE OUTPUT ===== */
+#schedules {
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* ===== SCHEDULE CARD ===== */
+.schedule-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 12px 30px rgba(0, 42, 92, 0.15);
+    border-left: 6px solid #fdb515;
+}
+
+/* ===== TABLE ===== */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.schedule-table th {
+    background: #002a5c;
+    color: #fdb515;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.schedule-table td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.schedule-table td.filled {
+    background: linear-gradient(135deg, #fff3cc, #fde68a);
+    font-weight: 600;
+    color: #002a5c;
+}
+
+/* ===== TEXT OUTPUT ===== */
+p {
+    background: #fffaf0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin: 6px 0;
+    border-left: 4px solid #fdb515;
+    font-size: 14px;
+    color: #002a5c;
+}
+
+/* ===== SEPARATOR ===== */
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #fdb515, transparent);
+    margin: 30px 0;
+}
+
+table {
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse; /* optional, keeps borders neat */
+    text-align: center;        /* center text inside cells */
+}
+
+
+label { 
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}

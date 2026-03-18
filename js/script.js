@@ -107,7 +107,6 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
                  (element.lab && !sameCourseSet(element.lec, element.lab))
                 ) {
                     element.invalid = true;
-                    console.log("IT HAPPENED");
             }
         })
     })
@@ -119,7 +118,6 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     combos.forEach(item => {
 
         let valid = []; 
-        console.log(item);
         item.forEach(element => {
             if (!element.invalid) {
                 valid.push(element);
@@ -175,50 +173,75 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
         }
     }
 
-    console.log(validSchedules);
 
-
+    generatedSchedule = MakeSchedule(validSchedules)
 
     const container = document.createElement("div");
     scheduleDisplay.appendChild(container);
 
+
     // Loop through each schedule
-    validSchedules.forEach((schedule, scheduleIndex) => {
+   validSchedules.forEach((schedule, scheduleIndex) => {
 
-        // Add a heading for the schedule
-        const heading = document.createElement("h3");
-        heading.textContent = `Schedule #${scheduleIndex + 1}`;
-        container.appendChild(heading);
+    // Add a heading for the schedule
+    const heading = document.createElement("h3");
+    heading.textContent = `Schedule #${scheduleIndex + 1}`;
+    container.appendChild(heading);
 
-        // Loop through each course in the schedule
-        schedule.forEach(course => {
-            let lecDays = appendDays(course.lec);
-            let tutDays = appendDays(course.tut); 
-            let labDays = appendDays(course.lab); 
-            
-            const lecItem = document.createElement("p");
-            lecItem.textContent = `Lecture: ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB} - ${course.lec.TIMES}:  ${lecDays} `;
-            container.appendChild(lecItem);
+    // Display the table (always visible)
+    displayScheduleTable(generatedSchedule[scheduleIndex], container);
 
-            // Output Tut, if it exists
-            if (course.tut) {
-                const tutItem = document.createElement("p");
-                tutItem.textContent = `Tut: ${course.tut.SUBJ_CODE} ${course.tut.CRSE_NUMB} - ${course.tut.TIMES}:  ${tutDays}`;
-                container.appendChild(tutItem);
-            }
+    // Create a collapsible container for all course info
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "Show/Hide Courses";
+    details.appendChild(summary);
 
-            // Output Lab, if it exists
-            if (course.lab) {
-                const labItem = document.createElement("p");
-                labItem.textContent = `Lab: ${course.lab.SUBJ_CODE} ${course.lab.CRSE_NUMB} - ${course.lab.TIMES}:  ${labDays}`;
-                container.appendChild(labItem);
-            }
+    // Loop through each course in the schedule
+    schedule.forEach(course => {
+        let lecDays = appendDays(course.lec);
+        let tutDays = appendDays(course.tut); 
+        let labDays = appendDays(course.lab); 
+        
+        // Lecture
+        const lecItem = document.createElement("p");
+        lecItem.innerHTML = `
+            <strong>Lecture:</strong> ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB}<br>
+            <strong>Time:</strong> ${course.lec.TIMES} | <strong>Days:</strong> ${lecDays}<br>
+            <strong>CRN:</strong> ${course.lec.CRN} | <strong>Instructor:</strong> ${course.lec.INSTRUCTORS}
+        `;
+        details.appendChild(lecItem);
 
-        });
+        // Tutorial
+        if (course.tut) {
+            const tutItem = document.createElement("p");
+            tutItem.innerHTML = `
+                <strong>Tutorial:</strong> ${course.tut.SUBJ_CODE} ${course.tut.CRSE_NUMB}<br>
+                <strong>Time:</strong> ${course.tut.TIMES} | <strong>Days:</strong> ${tutDays}<br>
+                <strong>CRN:</strong> ${course.tut.CRN}
+            `;
+            details.appendChild(tutItem);
+        }
 
-        const hr = document.createElement("hr");
-        container.appendChild(hr);
+        // Lab
+        if (course.lab) {
+            const labItem = document.createElement("p");
+            labItem.innerHTML = `
+                <strong>Lab:</strong> ${course.lab.SUBJ_CODE} ${course.lab.CRSE_NUMB}<br>
+                <strong>Time:</strong> ${course.lab.TIMES} | <strong>Days:</strong> ${labDays}<br>
+                <strong>CRN:</strong> ${course.lab.CRN}
+            `;
+            details.appendChild(labItem);
+        }
     });
+
+    container.appendChild(details);
+
+
+    const hr = document.createElement("hr");
+    container.appendChild(hr);
+});
+
 
 })
 

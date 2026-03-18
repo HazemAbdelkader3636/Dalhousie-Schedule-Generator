@@ -28,9 +28,9 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     let termType = document.getElementById("term")
     let data;
     if (termType.value == "fall") { 
-        data = fallData;
+        data = FallData2026;
     } else {
-        data = winterData; 
+        data = WinterData2026; 
     }
 
     let classes = {
@@ -206,7 +206,7 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
         // Lecture
         const lecItem = document.createElement("p");
         lecItem.innerHTML = `
-            <strong>Lecture:</strong> ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB}<br>
+            <strong>Lecture:</strong> ${course.lec.SUBJ_CODE} ${course.lec.CRSE_NUMB} | ${course.lec.CRSE_TITLE}<br>
             <strong>Time:</strong> ${course.lec.TIMES} | <strong>Days:</strong> ${lecDays}<br>
             <strong>CRN:</strong> ${course.lec.CRN} | <strong>Instructor:</strong> ${course.lec.INSTRUCTORS}
         `;

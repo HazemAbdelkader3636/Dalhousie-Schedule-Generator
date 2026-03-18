@@ -1,4 +1,4 @@
-winterData = [
+const winterData = [
   {
     "ROW_NUMBER": 1,
     "TERM_CODE": "202620",

@@ -156,3 +156,11 @@ label {
     justify-content: center;
     align-items: center;
 }
+
+th {
+    background-color: rgb(154, 171, 177);
+}
+
+td, th { 
+    width: 100px;
+}

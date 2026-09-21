@@ -16,14 +16,14 @@ document.getElementById("generateBtn").addEventListener("click", function(e) {
     let classThreeTitle = document.getElementById("input3").value.toUpperCase().trim();
     let classFourTitle = document.getElementById("input4").value.toUpperCase().trim();
     let classFiveTitle = document.getElementById("input5").value.toUpperCase().trim();
-    let classSixTitle = document.getElementById("input6").value.toUpperCase().trim();
+    let classSixTitle = "";
 
     let classOneNumber = document.getElementById("number1").value.trim()
     let classTwoNumber = document.getElementById("number2").value.trim()
     let classThreeNumber = document.getElementById("number3").value.trim()
     let classFourNumber = document.getElementById("number4").value.trim()
     let classFiveNumber = document.getElementById("number5").value.trim()
-    let classSixNumber = document.getElementById("number6").value.trim()
+    let classSixNumber = "";
 
     let termType = document.getElementById("term")
     

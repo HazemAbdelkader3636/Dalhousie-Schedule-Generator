@@ -106,7 +106,7 @@ button:active {
     border-collapse: collapse;
     border-radius: 14px;
     overflow: hidden;
-    margin-top: 12px;
+    margin: 6px auto 10px
 }
 
 .schedule-table th {
@@ -117,6 +117,7 @@ button:active {
 }
 
 .schedule-table td {
+    width: auto;
     border: 1px solid #e5e7eb;
     padding: 10px;
     font-size: 13px;
@@ -199,7 +200,7 @@ td, th {
     }
 
     input, select {
-        font-size: 16px; /* prevents zoom on iPhone */
+        font-size: 16px;
         padding: 10px;
     }
 
@@ -212,7 +213,7 @@ td, th {
     /* Make schedule cards tighter */
     .schedule-card {
         padding: 14px;
-        margin-bottom: 20px;
+        /*margin-bottom: 20px;*/
     }
 
     /* Make tables scroll horizontally instead of breaking layout */
